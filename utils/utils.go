@@ -12,6 +12,25 @@ func CheckError(e error) {
 	}
 }
 
+func IsSorted(a []int64) bool {
+	for i := 0; i < len(a)-1; i++ {
+		if a[i] > a[i+1] {
+			return false
+		}
+	}
+	return true
+}
+
+func Min(nums ...int64) int64 {
+	min := nums[0]
+	for _, v := range nums {
+		if min > v {
+			min = v
+		}
+	}
+	return min
+}
+
 func Max(nums ...int64) int64 {
 	max := nums[0]
 	for _, v := range nums {

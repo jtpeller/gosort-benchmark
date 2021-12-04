@@ -19,16 +19,3 @@ func Insertion(a []int64) []int64 {
 	}
 	return a
 }
-
-func InsertionFloat(a []float64) []float64 {
-	for i := 1; i < len(a); i++ {
-		key := a[i]
-		j := i - 1
-		for j >= 0 && a[j] > key {
-			a[j + 1] = a[j]
-			j--
-		}
-		a[j + 1] = key
-	}
-	return a
-}

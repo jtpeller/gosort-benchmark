@@ -18,50 +18,9 @@ func MergeSort(a []int64) []int64 {
 	return merge(left, right)		// combine
 }
 
-// merge sort for float64
-func MergeSortFloat(a []float64) []float64 {
-	la := len(a)
-	if la < 2 {
-		return a
-	}
-	left := MergeSortFloat(a[:la/2])		// up to middle
-	right := MergeSortFloat(a[la/2:])	// past middle
-	return mergeFloat(left, right)		// combine
-}
-
 // merges slices l & r
 func merge(l, r []int64) []int64 {
 	b := make([]int64, 0)
-	i, j := 0, 0
-	ll := len(l)
-	lr := len(r)
-
-	// merge arrays
-	for i < ll && j < lr {
-		if l[i] < r[j] {
-			b = append(b, l[i])
-			i++
-		} else {
-			b = append(b, r[j])
-			j++
-		}
-	}
-
-	// copy remaining from left
-	for ; i < ll; i++ {
-		b = append(b, l[i])
-	}
-
-	// copy remaining from right
-	for ; j < lr; j++ {
-		b = append(b, r[j])
-	}
-	return b
-}
-
-// merges slices l & r
-func mergeFloat(l, r []float64) []float64 {
-	b := make([]float64, 0)
 	i, j := 0, 0
 	ll := len(l)
 	lr := len(r)

@@ -1,19 +1,25 @@
 //============================================================================
-// bubble.go
+// gnome.go
 // 	Author      : jtpeller
 // 	Date		: December 03, 2021
-// 	Description : Bubble sort implementation
+// 	Description : gnome sort implementation
 //============================================================================
 
 package gosort
 
-func BubbleSort(a []int64) []int64 {
+func Gnome(a []int64) []int64 {
 	n := len(a)
-	for i := 0; i < n; i++ {
-		for j := 0; j < n - i - 1; j++ {
-			if a[j] > a[j+1] {
-				a[j], a[j+1] = a[j+1], a[j]
-			}
+	idx := 0
+
+	for idx < n {
+		if idx == 0 {
+			idx++
+		}
+		if a[idx] >= a[idx-1] {
+			idx++
+		} else {
+			a[idx], a[idx-1] = a[idx-1], a[idx]
+			idx--
 		}
 	}
 	return a
