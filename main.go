@@ -33,6 +33,18 @@ func main() {
 	duration := time.Since(start)
 	fmt.Println("Bubble sort took: ", duration)
 
+	// COUNTING SORT
+	start = time.Now()
+	sort.Counting(nums)
+	duration = time.Since(start)
+	fmt.Println("Counting sort took: ", duration)
+
+	// HEAP SORT
+	start = time.Now()
+	sort.HeapSort(nums, 0, len(nums))
+	duration = time.Since(start)
+	fmt.Println("Heap sort took: ", duration)
+
 	// INSERTION SORT
 	start = time.Now()
 	sort.Insertion(nums)
@@ -50,6 +62,12 @@ func main() {
 	sort.Quicksort(nums)
 	duration = time.Since(start)
 	fmt.Println("Quicksort took: ", duration)
+
+	// RADIX
+	start = time.Now()
+	sort.Radix(nums)
+	duration = time.Since(start)
+	fmt.Println("Radix took: ", duration)
 
 	// SELECTION SORT
 	start = time.Now()
