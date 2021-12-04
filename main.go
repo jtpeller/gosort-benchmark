@@ -33,5 +33,27 @@ func main() {
 	duration := time.Since(start)
 	fmt.Println("Bubble sort took: ", duration)
 
-	// 
+	// INSERTION SORT
+	start = time.Now()
+	sort.Insertion(nums)
+	duration = time.Since(start)
+	fmt.Println("Insertion sort took: ", duration)
+	
+	// MERGE SORT
+	start = time.Now()
+	sort.MergeSort(nums)
+	duration = time.Since(start)
+	fmt.Println("Merge sort took: ", duration)
+
+	// QUICKSORT
+	start = time.Now()
+	sort.Quicksort(nums)
+	duration = time.Since(start)
+	fmt.Println("Quicksort took: ", duration)
+
+	// SELECTION SORT
+	start = time.Now()
+	sort.Selection(nums)
+	duration = time.Since(start)
+	fmt.Println("Selection took: ", duration)
 }
