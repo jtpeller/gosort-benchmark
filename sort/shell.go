@@ -7,7 +7,6 @@
 
 package gosort
 
-// base 10 radix sort
 func ShellSort(a []int64) []int64 {
 	n := len(a)
 	h := 1

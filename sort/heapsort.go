@@ -8,39 +8,59 @@
 
 package gosort
 
-func HeapSort(a []int64, y, z int) []int64 {
-	first := y
-	low := 0
-	high := z - y
+import "math"
 
-	// build heap
-	for i := (high - 1)/2; i >= 0; i-- {
-		a = heapify(a, i, high, first)
+func HeapSort(a []int64) []int64 {
+	heapify(a)
+
+	end := len(a) - 1
+	for end > 0 {
+		a[end], a[0] = a[0], a[end]
+		end--
+		siftDown(a, 0, end)
 	}
-
-	// pop into end of data
-	for i := high - 1; i >= 0; i-- {
-		a[first], a[first+i] = a[first+i], a[first]
-		a = heapify(a, low, i, first)
-	}
-
 	return a
 }
 
+func parent(i int) int {
+	return int(math.Floor( float64(i-1) / 2 ))
+}
+
+func child(i int) int {
+	return 2*i+1
+}
+
 // enforces heap property
-func heapify(a []int64, low, high, first int) []int64 {
-	root := low
-	for {
-		child := 2 * root + 1
-		if child >= high {
-			break
-		} else if child+1 < high && a[first+child] < a[first+child+1] {
-			child++
-		} else if !(a[first+root] < a[first+child]) {
-			return a
-		}
-		a[first+root], a[first+child] = a[first+child], a[first+root]
-		root = child
+func heapify(a []int64) {
+	n := len(a)
+	s := parent(n - 1)
+
+	for s >= 0 {
+		siftDown(a, s, n-1)
+		s--
 	}
-	return a
+}
+
+// performs the work to actually enforce the heap property
+func siftDown(a []int64, s, e int) {
+	root := s
+	for child(root) <= e {
+		child := child(root)
+		idx := root
+
+		if a[idx] < a[child] {
+			idx = child
+		}
+
+		if child + 1 <= e && a[idx] < a[child+1] {
+			idx = child + 1
+		}
+
+		if idx == root {
+			return
+		}
+
+		a[root], a[idx] = a[idx], a[root]
+		root = idx
+	}
 }

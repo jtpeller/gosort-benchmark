@@ -1,8 +1,8 @@
 //============================================================================
-// Merge.go
+// selection.go
 // 	Author      : jtpeller
 // 	Date		: December 03, 2021
-// 	Description : Merge sort implementation
+// 	Description : selection sort implementation
 //============================================================================
 
 package gosort

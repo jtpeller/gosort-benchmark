@@ -1,6 +1,8 @@
 package main
 
 import (
+	"errors"
+	"flag"
 	"fmt"
 	sort "gosort/sort"
 	utils "gosort/utils"
@@ -10,117 +12,156 @@ import (
 	"time"
 )
 
-func getInput(input []string) []int64 {
+var VERBOSE bool = false	// for warning or other helpful output
+const WARN_NUMS = 32768		// count value for when a warning will issue about too big an input size
+
+func toIntSlice(input []string) []int64 {
 	nums := make([]int64, len(input))
 	for i, v := range input {
 		temp, err := strconv.ParseInt(v, 10, 64)
-		utils.CheckError(err)
+		utils.HandleError(err)
 		nums[i] = temp
 	}
 	return nums
 }
 
-func main() {
-	raw, err := ioutil.ReadFile("input.txt")
-	utils.CheckError(err)
+func checkSorted(foo []int64, name string) {
+	if VERBOSE {
+		if !utils.IsSorted(foo) {
+			if VERBOSE {
+				fmt.Println(foo)
+			}
+			fmt.Println("\t\t\t", name, "is not sorted")
+		}
+	}
+}
+
+func performSort(f func([]int64) []int64, name string, nums []int64) {
+	start := time.Now()
+	foo := f(nums)
+	duration := time.Since(start)
+	fmt.Println(name, "took:  \t", duration, "on", len(nums), "values")
+	checkSorted(foo, name)
+}
+
+func runSorts(vals []string) {
+	// BITONIC SORT
+	performSort(sort.BubbleSort, "Bitonic sort", toIntSlice(vals))
+
+	// BOGO SORT
+	performSort(sort.Bogo, "Bogo sort", toIntSlice(utils.Generate(10)))
+
+	// BUBBLE SORT
+	performSort(sort.BubbleSort, "Bubble sort", toIntSlice(vals))
+
+	// BUCKET SORT
+	performSort(sort.Bucket, "Bucket sort", toIntSlice(vals))
+
+	// COCKTAIL SORT
+	performSort(sort.Cocktail, "Cocktail sort", toIntSlice(vals))
+
+	// COMB SORT
+	performSort(sort.CombSort, "Comb sort", toIntSlice(vals))
+
+	// COUNTING SORT
+	performSort(sort.Counting, "Counting sort", toIntSlice(vals))
+
+	// CYCLE SORT
+	performSort(sort.Cycle, "Cycle sort", toIntSlice(vals))
+
+	// GNOME SORT
+	performSort(sort.Gnome, "Gnome sort", toIntSlice(vals))
+
+	// HEAP SORT
+	performSort(sort.HeapSort, "Heap sort", toIntSlice(vals))
+
+	// INSERTION SORT
+	performSort(sort.Insertion, "Insertion sort", toIntSlice(vals))
+
+	// MERGE SORT
+	performSort(sort.MergeSort, "Merge sort", toIntSlice(vals))
+
+	// ODD EVEN
+	performSort(sort.OddEven, "Odd-even sort", toIntSlice(vals))
+
+	// PANCAKE SORT
+	performSort(sort.Pancake, "Pancake sort", toIntSlice(vals))
+
+	// PIGEONHOLE SORT
+	performSort(sort.Pigeonhole, "Pigeonhole sort", toIntSlice(vals))
+
+	// QUICKSORT
+	performSort(sort.Quicksort, "Quicksort", toIntSlice(vals))
+
+	// RANDOMIZED QUICKSORT
+	performSort(sort.RandomQuicksort, "RNG Quicksort", toIntSlice(vals))
+
+	// RADIX
+	performSort(sort.Radix, "Radix sort", toIntSlice(vals))
+
+	// SELECTION SORT
+	performSort(sort.Selection, "Selection sort", toIntSlice(vals))
+
+	// SHELL SORT
+	performSort(sort.ShellSort, "Shell sort", toIntSlice(vals))
+
+	// STOOGE SORT
+	performSort(sort.Stooge, "Stooge sort", toIntSlice(utils.Generate(128)))
+
+	// TIM SORT
+	performSort(sort.TimSort, "Tim sort", toIntSlice(vals))
+}
+
+func runWithCount(inputsize int64) {
+	vals := utils.Generate(inputsize)
+	runSorts(vals)
+}
+
+func runWithFile(filename string) {
+	// load file
+	raw, err := ioutil.ReadFile(filename)
+	utils.HandleError(err)
 	dat := string(raw)
 	vals := strings.Split(dat, "\n")
 
-	// BOGO SORT
-	bogo := []int64{5, 2, 6, 4, 1, 7, 8, 9, 3}
-	start := time.Now()
-	sort.Bogo(bogo)
-	duration := time.Since(start)
-	fmt.Println("Bogo sort took: ", duration, "on 10 values")
+	runSorts(vals)
+}
 
-	// BUBBLE SORT
-	nums := getInput(vals)
-	start = time.Now()
-	sort.BubbleSort(nums)
-	duration = time.Since(start)
-	fmt.Println("Bubble sort took: ", duration)
+func main() {
+	// program setup (flags)
+	filename := flag.String("input", "test.txt", "Input file for the sorting algorithms")
+	inputsize := flag.Int64("count", 0, "Number of input to compute. Cannot be used with -input")
+	verbose := flag.Bool("verbose", false, "Extra printing or debug information. 0 for quiet. 1 for verbose.")
 
-	// BUCKET SORT
-	nums = getInput(vals)
-	start = time.Now()
-	sort.Bucket(nums)
-	duration = time.Since(start)
-	fmt.Println("Bucket sort took: ", duration)
+	// parse!
+	flag.Parse()
 
-	// COCKTAIL SORT
-	nums = getInput(vals)
-	start = time.Now()
-	sort.Cocktail(nums)
-	duration = time.Since(start)
-	fmt.Println("Cocktail sort took: ", duration)
-
-	// COUNTING SORT
-	nums = getInput(vals)
-	start = time.Now()
-	sort.Counting(nums)
-	duration = time.Since(start)
-	fmt.Println("Counting sort took: ", duration)
-
-	// GNOME SORT
-	nums = getInput(vals)
-	start = time.Now()
-	sort.Gnome(nums)
-	duration = time.Since(start)
-	fmt.Println("Gnome sort took: ", duration)
-
-	// HEAP SORT
-	nums = getInput(vals)
-	start = time.Now()
-	sort.HeapSort(nums, 0, len(nums))
-	duration = time.Since(start)
-	fmt.Println("Heap sort took: ", duration)
-
-	// INSERTION SORT
-	nums = getInput(vals)
-	start = time.Now()
-	sort.Insertion(nums)
-	duration = time.Since(start)
-	fmt.Println("Insertion sort took: ", duration)
+	// handle verbose-ness
+	if *verbose {
+		VERBOSE = true
+	} else if !*verbose {
+		VERBOSE = false
+	} else {
+		utils.PrintWarning("Warning: Verbose not in specified range. Defaulting to quiet mode.")
+		VERBOSE = false
+	}
 	
-	// MERGE SORT
-	nums = getInput(vals)
-	start = time.Now()
-	sort.MergeSort(nums)
-	duration = time.Since(start)
-	fmt.Println("Merge sort took: ", duration)
-
-	// QUICKSORT
-	nums = getInput(vals)
-	start = time.Now()
-	sort.Quicksort(nums)
-	duration = time.Since(start)
-	fmt.Println("Quicksort took: ", duration)
-
-	// RANDOMIZED QUICKSORT
-	nums = getInput(vals)
-	start = time.Now()
-	sort.RandomQuicksort(nums)
-	duration = time.Since(start)
-	fmt.Println("Quicksort (random) took: ", duration)
-
-	// RADIX
-	nums = getInput(vals)
-	start = time.Now()
-	sort.Radix(nums)
-	duration = time.Since(start)
-	fmt.Println("Radix took: ", duration)
-
-	// SELECTION SORT
-	nums = getInput(vals)
-	start = time.Now()
-	sort.Selection(nums)
-	duration = time.Since(start)
-	fmt.Println("Selection took: ", duration)
-
-	// SHELL SORT
-	nums = getInput(vals)
-	start = time.Now()
-	sort.ShellSort(nums)
-	duration = time.Since(start)
-	fmt.Println("Shell sort took: ", duration)
+	if *filename != "test.txt" && *inputsize != 0 {
+		utils.HandleError(errors.New("cannot use the -input and -count flags together"))
+	} else if *filename == "test.txt" {
+		utils.PrintWarning("Warning: Using default test file: test.txt")
+		runWithFile(*filename)	
+	} else if *inputsize == 0 {
+		utils.PrintInfo("Running with input file: " + *filename)
+		runWithFile(*filename)
+	} else if *inputsize != 0 {
+		if *inputsize >= WARN_NUMS {
+			utils.PrintWarning("Warning: The value you provided may take a while to compute...")
+		}
+		if VERBOSE {
+			utils.PrintDebug("Note: This input size will not be used for bad sorts. Bad sorts include: Bogo, Stooge")
+		}
+		fmt.Println("Running with input size:", *inputsize)
+		runWithCount(*inputsize)
+	}	
 }
