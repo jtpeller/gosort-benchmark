@@ -44,4 +44,7 @@ This will run the program on the default file `test.txt`
 Run this command for help on the possible options:
 `go run main.go -h`
 
-Instead of outputting the sorted values, main.go compares the running times for each of the different algorithms.
+Instead of outputting the sorted values, `main.go` compares the running times for each of the different algorithms.
+
+To compile into a binary, use:
+`go build`

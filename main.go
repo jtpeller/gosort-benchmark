@@ -148,7 +148,7 @@ func main() {
 	
 	if *filename != "test.txt" && *inputsize != 0 {
 		utils.HandleError(errors.New("cannot use the -input and -count flags together"))
-	} else if *filename == "test.txt" {
+	} else if *filename == "test.txt" && *inputsize == 0 {
 		utils.PrintWarning("Warning: Using default test file: test.txt")
 		runWithFile(*filename)	
 	} else if *inputsize == 0 {
