@@ -46,7 +46,7 @@ func performSort(f func([]int64) []int64, name string, nums []int64) {
 
 func runSorts(vals []string) {
 	// BITONIC SORT
-	performSort(sort.BubbleSort, "Bitonic sort", toIntSlice(vals))
+	performSort(sort.Bitonic, "Bitonic sort", toIntSlice(vals))
 
 	// BOGO SORT
 	performSort(sort.Bogo, "Bogo sort", toIntSlice(utils.Generate(10)))
