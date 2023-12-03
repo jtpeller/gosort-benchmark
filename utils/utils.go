@@ -9,12 +9,12 @@ import (
 )
 
 const (
-	black = "\u001b[30m"
-	red = "\u001b[31m"
-	yellow = "\u001b[33m"
-	green = "\u001b[32m"
-	blue = "\u001b[34m"
-	reset = "\u001b[0m"
+	Black = "\u001b[30m"
+	Red = "\u001b[31m"
+	Yellow = "\u001b[33m"
+	Green = "\u001b[32m"
+	Blue = "\u001b[34m"
+	Reset = "\u001b[0m"
 )
 
 type Interface interface {
@@ -41,8 +41,9 @@ func HandleError(e error) {
 func Generate(size int64) []string {
 	list := make([]string, size)
 	for i := int64(0); i < size; i++ {
-		rand.Seed(time.Now().UnixNano())
-		list[i] = strconv.FormatInt(rand.Int63n(size), 10)
+		seed := rand.NewSource(time.Now().UnixNano())
+		rng := rand.New(seed)
+		list[i] = strconv.FormatInt(rng.Int63n(size), 10)
 	}
 	return list
 }
@@ -88,20 +89,20 @@ func MaxIdx(nums ...int64) (int, int64) {
 	return idx, max
 }
 
-func PrintDebug(msg string) {
-	fmt.Println(blue + msg + reset)
+func PrintDebug(msg ...string) {
+	fmt.Println(Blue, msg, Reset)
 }
 
-func PrintInfo(msg string) {
-	fmt.Println(green + msg + reset)
+func PrintInfo(msg ...string) {
+	fmt.Println(Green, msg, Reset)
 }
 
-func PrintWarning(msg string) {
-	fmt.Println(yellow + msg + reset)
+func PrintWarning(msg ...string) {
+	fmt.Println(Yellow, msg, Reset)
 }
 
-func PrintError(msg string) {
-	fmt.Println(red + msg + reset)
+func PrintError(msg ...string) {
+	fmt.Println(Red, msg, Reset)
 }
 
 func RemoveElement(a []int64, idx int) []int64 {

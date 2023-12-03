@@ -4,16 +4,34 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	sort "gosort/sort"
+	sortpkg "gosort/sort"
 	utils "gosort/utils"
-	"io/ioutil"
+	"os"
+	"sort"
 	"strconv"
 	"strings"
+	"sync"
+	"text/tabwriter"
 	"time"
 )
 
+type Sorter struct {
+	f func([]int64) []int64;	// sorting function
+	s string;			// name of Sort to output to console
+	v []int64;
+}
+
+type Result struct {
+	s string;			// name of sort
+	t time.Duration;	// time it took to sort
+	n int;				// number of numbers that were sorted
+}
+
 var VERBOSE bool = false	// for warning or other helpful output
 const WARN_NUMS = 32768		// count value for when a warning will issue about too big an input size
+var wg sync.WaitGroup
+var results []Result		// results array
+
 
 func toIntSlice(input []string) []int64 {
 	nums := make([]int64, len(input))
@@ -26,111 +44,92 @@ func toIntSlice(input []string) []int64 {
 }
 
 func checkSorted(foo []int64, name string) {
-	if VERBOSE {
-		if !utils.IsSorted(foo) {
-			if VERBOSE {
-				fmt.Println(foo)
-			}
-			fmt.Println("\t\t\t", name, "is not sorted")
+	if !utils.IsSorted(foo) {
+		if VERBOSE {
+			fmt.Println(foo)
 		}
+		utils.PrintWarning("\t\t\t"+name+" is not sorted")
+	} else if VERBOSE {
+		utils.PrintInfo("\t\t\t"+name+" is sorted")
 	}
 }
 
-func performSort(f func([]int64) []int64, name string, nums []int64) {
+func performSort(f func([]int64) []int64, name string, nums []int64, c chan Result) {
+	defer wg.Done()
+
 	start := time.Now()
 	foo := f(nums)
 	duration := time.Since(start)
-	fmt.Println(name, "took:  \t", duration, "on", len(nums), "values")
+
 	checkSorted(foo, name)
+
+	c <- Result{s: name, t: duration, n: len(foo)}
+	return
 }
 
-func runSorts(vals []string) {
-	// BITONIC SORT
-	performSort(sort.Bitonic, "Bitonic sort", toIntSlice(vals))
+func runSorts(sorts []Sorter) {
+	for _, v := range sorts {
+		c := make(chan Result, 1)
+		wg.Add(1)
+		go performSort(v.f, v.s, v.v, c)
 
-	// BOGO SORT
-	performSort(sort.Bogo, "Bogo sort", toIntSlice(utils.Generate(10)))
+		val := <- c
+		results = append(results, val)
+		close(c)
+	}
 
-	// BUBBLE SORT
-	performSort(sort.BubbleSort, "Bubble sort", toIntSlice(vals))
+	// wait for sorting to complete
+	wg.Wait()
 
-	// BUCKET SORT
-	performSort(sort.Bucket, "Bucket sort", toIntSlice(vals))
+	sort.Slice(results, func(i, j int) bool {
+		return results[i].t < results[j].t
+	})
 
-	// COCKTAIL SORT
-	performSort(sort.Cocktail, "Cocktail sort", toIntSlice(vals))
+	utils.PrintInfo("Sorting Completed. Here are the results...")
 
-	// COMB SORT
-	performSort(sort.CombSort, "Comb sort", toIntSlice(vals))
+	for _, r := range results {
+		w := tabwriter.NewWriter(os.Stdout, 20, 1, 1, ' ', 0)
+		fmt.Fprintln(w, r.s, "\t", r.t, "\t", r.n, " values")
+		w.Flush()
+	}
 
-	// COUNTING SORT
-	performSort(sort.Counting, "Counting sort", toIntSlice(vals))
-
-	// CYCLE SORT
-	performSort(sort.Cycle, "Cycle sort", toIntSlice(vals))
-
-	// GNOME SORT
-	performSort(sort.Gnome, "Gnome sort", toIntSlice(vals))
-
-	// HEAP SORT
-	performSort(sort.HeapSort, "Heap sort", toIntSlice(vals))
-
-	// INSERTION SORT
-	performSort(sort.Insertion, "Insertion sort", toIntSlice(vals))
-
-	// MERGE SORT
-	performSort(sort.MergeSort, "Merge sort", toIntSlice(vals))
-
-	// ODD EVEN
-	performSort(sort.OddEven, "Odd-even sort", toIntSlice(vals))
-
-	// PANCAKE SORT
-	performSort(sort.Pancake, "Pancake sort", toIntSlice(vals))
-
-	// PIGEONHOLE SORT
-	performSort(sort.Pigeonhole, "Pigeonhole sort", toIntSlice(vals))
-
-	// QUICKSORT
-	performSort(sort.Quicksort, "Quicksort", toIntSlice(vals))
-
-	// RANDOMIZED QUICKSORT
-	performSort(sort.RandomQuicksort, "RNG Quicksort", toIntSlice(vals))
-
-	// RADIX
-	performSort(sort.Radix, "Radix sort", toIntSlice(vals))
-
-	// SELECTION SORT
-	performSort(sort.Selection, "Selection sort", toIntSlice(vals))
-
-	// SHELL SORT
-	performSort(sort.ShellSort, "Shell sort", toIntSlice(vals))
-
-	// STOOGE SORT
-	performSort(sort.Stooge, "Stooge sort", toIntSlice(utils.Generate(128)))
-
-	// TIM SORT
-	performSort(sort.TimSort, "Tim sort", toIntSlice(vals))
 }
 
 func runWithCount(inputsize int64) {
+	start := time.Now()
+
 	vals := utils.Generate(inputsize)
-	runSorts(vals)
+
+	// set up sort array to loop thru
+	sorts := createSorter(vals, true)
+	runSorts(sorts)
+
+	dur := time.Since(start)
+	utils.PrintInfo("Total Running Time", dur.String())
 }
 
 func runWithFile(filename string) {
+	start := time.Now()
+
 	// load file
-	raw, err := ioutil.ReadFile(filename)
+	raw, err := os.ReadFile(filename)
 	utils.HandleError(err)
 	dat := string(raw)
 	vals := strings.Split(dat, "\n")
 
-	runSorts(vals)
+	// set up sort array to loop thru
+	sorts := createSorter(vals, true)
+
+	runSorts(sorts)
+
+	dur := time.Since(start)
+	utils.PrintInfo("Total Running Time", dur.String())
 }
 
 func main() {
 	// program setup (flags)
 	filename := flag.String("input", "test.txt", "Input file for the sorting algorithms")
-	inputsize := flag.Int64("count", 0, "Number of input to compute. Cannot be used with -input")
+	inputsize := flag.Int64("count", 0, "Number of input to compute. Cannot be used with -input.")
 	verbose := flag.Bool("verbose", false, "Extra printing or debug information. 0 for quiet. 1 for verbose.")
 
 	// parse!
@@ -161,7 +160,41 @@ func main() {
 		if VERBOSE {
 			utils.PrintDebug("Note: This input size will not be used for bad sorts. Bad sorts include: Bogo, Stooge")
 		}
-		fmt.Println("Running with input size:", *inputsize)
+		s := fmt.Sprintf("Running with input size: %d", *inputsize)
+		utils.PrintInfo(s)
 		runWithCount(*inputsize)
 	}	
+}
+
+func createSorter(vals []string, includeBadSorts bool) []Sorter {
+	// create Sorter arr
+	sorts := make([]Sorter, 0)
+
+	sorts = append(sorts, Sorter{f: sortpkg.Bitonic, s: "Bitonic Sort", v: toIntSlice(vals)})
+	sorts = append(sorts, Sorter{f: sortpkg.BubbleSort, s: "Bubble", v: toIntSlice(vals)})
+	sorts = append(sorts, Sorter{f: sortpkg.Bucket, s: "Bucket", v: toIntSlice(vals)})
+	sorts = append(sorts, Sorter{f: sortpkg.Cocktail, s: "Cocktail", v: toIntSlice(vals)})
+	sorts = append(sorts, Sorter{f: sortpkg.CombSort, s: "CombSort", v: toIntSlice(vals)})
+	sorts = append(sorts, Sorter{f: sortpkg.Counting, s: "Counting", v: toIntSlice(vals)})
+	sorts = append(sorts, Sorter{f: sortpkg.Cycle, s: "Cycle", v: toIntSlice(vals)})
+	sorts = append(sorts, Sorter{f: sortpkg.Gnome, s: "Gnome", v: toIntSlice(vals)})
+	sorts = append(sorts, Sorter{f: sortpkg.HeapSort, s: "HeapSort", v: toIntSlice(vals)})
+	sorts = append(sorts, Sorter{f: sortpkg.Insertion, s: "Insertion", v: toIntSlice(vals)})
+	sorts = append(sorts, Sorter{f: sortpkg.MergeSort, s: "Merge", v: toIntSlice(vals)})
+	sorts = append(sorts, Sorter{f: sortpkg.OddEven, s: "OddEven", v: toIntSlice(vals)})
+	sorts = append(sorts, Sorter{f: sortpkg.Pancake, s: "Pancake", v: toIntSlice(vals)})
+	sorts = append(sorts, Sorter{f: sortpkg.Pigeonhole, s: "Pigeonhole", v: toIntSlice(vals)})
+	sorts = append(sorts, Sorter{f: sortpkg.Quicksort, s: "Quicksort", v: toIntSlice(vals)})
+	sorts = append(sorts, Sorter{f: sortpkg.RandomQuicksort, s: "RNG Quicksort", v: toIntSlice(vals)})
+	sorts = append(sorts, Sorter{f: sortpkg.Radix, s: "Radix", v: toIntSlice(vals)})
+	sorts = append(sorts, Sorter{f: sortpkg.Selection, s: "Selection", v: toIntSlice(vals)})
+	sorts = append(sorts, Sorter{f: sortpkg.ShellSort, s: "ShellSort", v: toIntSlice(vals)})
+	sorts = append(sorts, Sorter{f: sortpkg.TimSort, s: "TimSort", v: toIntSlice(vals)})
+
+	if includeBadSorts {
+		sorts = append(sorts, Sorter{f: sortpkg.Bogo, s: "Bogo", v: toIntSlice(utils.Generate(10))})
+		sorts = append(sorts, Sorter{f: sortpkg.Stooge, s: "Stooge", v: toIntSlice(utils.Generate(128))})
+	}
+
+	return sorts
 }
