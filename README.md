@@ -7,14 +7,13 @@ This repo contains various sorting algorithms written in go.
 Running `main.go` will compare the execution times for each of the different sorting algorithms in the `sort` folder, instead of outputting the sorted values.
 I implemented multithreading to improve the overall runtime, instead of running each sort sequentially.
 
-Use the `-h` or `-help` flags to see all options.
-
 To compile into a binary, use the following while in the directory with `main.go`:
 `go build`
 
 ## Modes
 
-There are a few different modes and options
+There are a few different modes and options. You can use the `-h` or `-help` flags to see all options.
+
 To run them, open the root folder of this repo locally, in a terminal.
 Then, follow the instructions below depending on which mode you want to execute.
 
@@ -30,7 +29,9 @@ Notes:
 Default mode executes on the default (random) values.
 In your terminal, run:
 
-`go run main.go`
+```sh
+go run main.go
+```
 
 This will run the program on the default file: `test.txt`, which has 100 values.
 
@@ -39,11 +40,15 @@ This will run the program on the default file: `test.txt`, which has 100 values.
 You can input a number of values to test the sorting algorithms against.
 In your terminal, run:
 
-`go run main.go -count ####`
+```sh
+go run main.go -count num
+```
 
 where #### is replaced by the number you want to enter. For instance:
 
-`go run main.go -count 69420`
+```sh
+go run main.go -count 69420
+```
 
 will execute each of the sorting algorithms on 69420 randomly generated digits varying in size.
 
@@ -52,51 +57,57 @@ will execute each of the sorting algorithms on 69420 randomly generated digits v
 You can also input a file of your own custom values to test the sorting algorithms against.
 In your terminal, run:
 
-`go run main.go -input filename.txt`
+```sh
+go run main.go -input filename
+```
 
-where `filename.txt` is the path to the file you want to use. For instance:
+where `filename` is the path to the file you want to use. For instance:
 
-`go run main.go -input input.txt`
+```sh
+go run main.go -input input.txt
+```
 
 will use the file `input.txt` (which is provided in this repo).
 
 ### Verbose Option
 
 Verbose is an option to see extra printing or debug information.
-Apply 0 for quiet, or 1 for verbose:
+Apply the verbose option for additional information.
 
-`go run main.go -verbose 1`
+```sh
+go run main.go -verbose
+```
 
-Verbose can be added to other modes (i.e. count+verbose mode).
+Verbose can be added to other modes (i.e., count + verbose mode).
 
 ## Contents
 
-- sort
-  - `bitonic.go` -- implementation for bitonic sort
-  - `bogo.go` -- implementation for bogo sort
-  - `bubble.go` -- implementation for bubble sort
-  - `bucket.go` -- implementation for bucket sort
-  - `cocktail.go` -- implementation for cocktail sort
-  - `comb.go` -- implementation for comb sort
-  - `counting.go` -- implementation for counting sort
-  - `cycle.go` -- implementation for cycle sort
-  - `gnome.go` -- implementation for gnome sort
-  - `heapsort.go` -- implementation for heap sort
-  - `insertion.go` -- implementation for insertion sort
-  - `merge.go` -- implementation for merge sort
-  - `oddeven.go` -- implementation for odd-even sort
-  - `pancake.go` -- implementation for pancake sort
-  - `pigeonhole.go` -- implementation for pigeonhole sort
-  - `quicksort.go` -- implementation for quicksort
-  - `radix.go` -- implementation for radix sort
-  - `selection.go` -- implementation for selection sort
-  - `shell.go` -- implementation for shell sort
-  - `stooge.go` -- implementation for stooge sort
-  - `tim.go` -- implementation for tim sort
+- sort -- folder containing the implementation for the sort in the filename
+  - `bitonic.go`
+  - `bogo.go`
+  - `bubble.go`
+  - `bucket.go`
+  - `cocktail.go`
+  - `comb.go`
+  - `counting.go`
+  - `cycle.go`
+  - `gnome.go`
+  - `heapsort.go`
+  - `insertion.go`
+  - `merge.go`
+  - `oddeven.go`
+  - `pancake.go`
+  - `pigeonhole.go`
+  - `quicksort.go`
+  - `radix.go`
+  - `selection.go`
+  - `shell.go`
+  - `stooge.go`
+  - `tim.go`
 - utils
   - `utils.go` -- general utils and other useful things
-- `go.mod` -- module file
+- `go.mod` -- Go module file
 - `input.txt` -- sample text file with numbers 1 thru 16384 (shuffled)
-- `main.go` -- houses main
-- `README.md` -- the thing you're reading
+- `main.go` -- implementation for CLI options, timing, etc.
+- `README.md` -- what you're reading
 - `test.txt` -- smaller test file with numbers 1 thru 100 (shuffled)

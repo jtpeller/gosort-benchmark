@@ -134,9 +134,9 @@ func runWithFile(filename string) {
 
 func main() {
 	// program setup (flags)
-	filename := flag.String("input", "test.txt", "Input file for the sorting algorithms")
+	filename := flag.String("input", "test.txt", "Input file for the sorting algorithms. Cannot be used with -count.")
 	inputsize := flag.Int64("count", 0, "Number of input to compute. Cannot be used with -input.")
-	verbose := flag.Bool("verbose", false, "Extra printing or debug information. 0 for quiet. 1 for verbose.")
+	verbose := flag.Bool("verbose", false, "Extra printing or debug information.")
 
 	// parse!
 	flag.Parse()
