@@ -1,3 +1,10 @@
+//============================================================================
+// main.go
+// 	Author      : jtpeller
+// 	Date		: December 06, 2021
+// 	Description : Runs the entire sorting program.
+//============================================================================
+
 package main
 
 import (
@@ -17,7 +24,7 @@ import (
 
 type Sorter struct {
 	f func([]int64) []int64;	// sorting function
-	s string;			// name of Sort to output to console
+	s string;					// name of Sort to output to console
 	v []int64;
 }
 
@@ -64,7 +71,6 @@ func performSort(f func([]int64) []int64, name string, nums []int64, c chan Resu
 	checkSorted(foo, name)
 
 	c <- Result{s: name, t: duration, n: len(foo)}
-	return
 }
 
 func runSorts(sorts []Sorter) {

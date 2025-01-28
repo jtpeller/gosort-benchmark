@@ -1,8 +1,8 @@
 //============================================================================
-// bitonic.go
+// pancake.go
 // 	Author      : jtpeller
 // 	Date		: December 06, 2021
-// 	Description : Bitonic sort implementation
+// 	Description : pancake sort implementation
 //============================================================================
 
 package gosort
