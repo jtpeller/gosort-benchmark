@@ -9,12 +9,12 @@ import (
 )
 
 const (
-	Black = "\u001b[30m"
-	Red = "\u001b[31m"
+	Black  = "\u001b[30m"
+	Red    = "\u001b[31m"
 	Yellow = "\u001b[33m"
-	Green = "\u001b[32m"
-	Blue = "\u001b[34m"
-	Reset = "\u001b[0m"
+	Green  = "\u001b[32m"
+	Blue   = "\u001b[34m"
+	Reset  = "\u001b[0m"
 )
 
 type Interface interface {
@@ -106,5 +106,5 @@ func PrintError(msg ...string) {
 }
 
 func RemoveElement(a []int64, idx int) []int64 {
-    return append(a[:idx], a[idx+1:]...)
+	return append(a[:idx], a[idx+1:]...)
 }

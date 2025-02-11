@@ -20,7 +20,7 @@ func RandomQuicksort(a []int64) []int64 {
 	}
 
 	// init
-	l, r := 0, len(a) - 1
+	l, r := 0, len(a)-1
 	pivot := rand.Int() % len(a)
 	a[pivot], a[r] = a[r], a[pivot]
 
@@ -45,7 +45,7 @@ func RandomQuicksort(a []int64) []int64 {
 func quick(a []int64, l, r int) []int64 {
 	if l < r {
 		pivot := partition(a, l, r)
-		a = quick(a, l, pivot - 1)
+		a = quick(a, l, pivot-1)
 		a = quick(a, pivot+1, r)
 	}
 	return a

@@ -24,7 +24,7 @@ func Bucket(a []int64) []int64 {
 	}
 
 	for _, n := range a {
-		idx := int(n-min)/bucketSize
+		idx := int(n-min) / bucketSize
 		buckets[idx] = append(buckets[idx], n)
 	}
 

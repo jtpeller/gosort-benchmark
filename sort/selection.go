@@ -16,7 +16,7 @@ func Selection(a []int64) []int64 {
 				minidx = j
 			}
 		}
-		a[i], a[minidx] = a[minidx], a[i]	// swap
+		a[i], a[minidx] = a[minidx], a[i] // swap
 	}
 	return a
 }

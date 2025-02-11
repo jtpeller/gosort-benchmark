@@ -13,9 +13,9 @@ func MergeSort(a []int64) []int64 {
 	if la < 2 {
 		return a
 	}
-	left := MergeSort(a[:la/2])		// up to middle
-	right := MergeSort(a[la/2:])	// past middle
-	return merge(left, right)		// combine
+	left := MergeSort(a[:la/2])  // up to middle
+	right := MergeSort(a[la/2:]) // past middle
+	return merge(left, right)    // combine
 }
 
 // merges slices l & r

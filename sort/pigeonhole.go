@@ -18,7 +18,7 @@ func Pigeonhole(a []int64) []int64 {
 
 	// populate the holes
 	for _, v := range a {
-		holes[v - min]++
+		holes[v-min]++
 	}
 
 	// put elements in order

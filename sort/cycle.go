@@ -40,8 +40,8 @@ func Cycle(a []int64) []int64 {
 					pos++
 				}
 			}
-	
-			for v == a[pos] {	// place it
+
+			for v == a[pos] { // place it
 				pos++
 			}
 			a[pos], v = v, a[pos]

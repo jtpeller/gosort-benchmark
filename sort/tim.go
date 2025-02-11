@@ -19,15 +19,15 @@ func TimSort(a []int64) []int64 {
 	out := make([]int64, 0)
 
 	for l := 0; l < n; l += min {
-		r := int(math.Min( float64(l+min-1), float64(n-1)))
+		r := int(math.Min(float64(l+min-1), float64(n-1)))
 		out = timInsertion(a, l, r)
 	}
 
 	s := min
 	for s < n {
-		for l := 0; l < n; l += 2*s {
-			m := int(math.Min( float64(l+s-1), float64(n-1) ))
-			r := int(math.Min( float64(l+2*s-1), float64(n-1) ))
+		for l := 0; l < n; l += 2 * s {
+			m := int(math.Min(float64(l+s-1), float64(n-1)))
+			r := int(math.Min(float64(l+2*s-1), float64(n-1)))
 			out = timMerge(a, l, m, r)
 		}
 		s *= 2
@@ -45,10 +45,10 @@ func minrun(n int) int {
 	return n + r
 }
 
-func timInsertion(a[] int64, l, r int) []int64 {
-	for i := l+1; i < r+1; i++ {
+func timInsertion(a []int64, l, r int) []int64 {
+	for i := l + 1; i < r+1; i++ {
 		v := a[i]
-		j := i-1
+		j := i - 1
 		for j >= l && v < a[j] {
 			a[j+1] = a[j]
 			j -= 1

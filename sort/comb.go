@@ -7,7 +7,7 @@
 
 package gosort
 
-func CombSort(a []int64) []int64{
+func CombSort(a []int64) []int64 {
 	// init
 	n := len(a)
 	gap := n

@@ -29,10 +29,10 @@ func Counting(a []int64) []int64 {
 	// generate output
 	out := make([]int64, len(a))
 	for i := 0; i < len(a); i++ {
-		v := a[i]			// value to add
-		p := counts[v] - 1	// position
+		v := a[i]          // value to add
+		p := counts[v] - 1 // position
 
-		out[p] = v			// add the value
+		out[p] = v // add the value
 		counts[v]--
 	}
 	return out

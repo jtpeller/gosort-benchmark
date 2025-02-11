@@ -19,11 +19,11 @@ func Radix(a []int64) []int64 {
 	temp := make([]int64, n)
 
 	// loop to get to the largest sigdig
-	for max / sigdig > 0 {
+	for max/sigdig > 0 {
 		// generate buckets
 		bucket := make([]int64, 10)
 		for i := 0; i < n; i++ {
-			bucket[(a[i] / sigdig) % 10]++
+			bucket[(a[i]/sigdig)%10]++
 		}
 
 		// add prev to curr
@@ -33,8 +33,8 @@ func Radix(a []int64) []int64 {
 
 		// fill a temp array
 		for i := n - 1; i >= 0; i-- {
-			bucket[(a[i] / sigdig) % 10]--
-			temp[bucket[(a[i] / sigdig) % 10]] = a[i]
+			bucket[(a[i]/sigdig)%10]--
+			temp[bucket[(a[i]/sigdig)%10]] = a[i]
 		}
 
 		for i := 0; i < n; i++ {

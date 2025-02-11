@@ -10,7 +10,7 @@ package gosort
 func ShellSort(a []int64) []int64 {
 	n := len(a)
 	h := 1
-	for h < n/3 {		// knuth's formula
+	for h < n/3 { // knuth's formula
 		h = 3*h + 1
 	}
 

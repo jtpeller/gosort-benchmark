@@ -23,22 +23,21 @@ import (
 )
 
 type Sorter struct {
-	f func([]int64) []int64;	// sorting function
-	s string;					// name of Sort to output to console
-	v []int64;
+	f func([]int64) []int64 // sorting function
+	s string                // name of Sort to output to console
+	v []int64
 }
 
 type Result struct {
-	s string;			// name of sort
-	t time.Duration;	// time it took to sort
-	n int;				// number of numbers that were sorted
+	s string        // name of sort
+	t time.Duration // time it took to sort
+	n int           // number of numbers that were sorted
 }
 
-var VERBOSE bool = false	// for warning or other helpful output
-const WARN_NUMS = 32768		// count value for when a warning will issue about too big an input size
+var VERBOSE bool = false // for warning or other helpful output
+const WARN_NUMS = 32768  // count value for when a warning will issue about too big an input size
 var wg sync.WaitGroup
-var results []Result		// results array
-
+var results []Result // results array
 
 func toIntSlice(input []string) []int64 {
 	nums := make([]int64, len(input))
@@ -55,9 +54,9 @@ func checkSorted(foo []int64, name string) {
 		if VERBOSE {
 			fmt.Println(foo)
 		}
-		utils.PrintWarning("\t\t\t"+name+" is not sorted")
+		utils.PrintWarning("\t\t\t" + name + " is not sorted")
 	} else if VERBOSE {
-		utils.PrintInfo("\t\t\t"+name+" is sorted")
+		utils.PrintInfo("\t\t\t" + name + " is sorted")
 	}
 }
 
@@ -79,7 +78,7 @@ func runSorts(sorts []Sorter) {
 		wg.Add(1)
 		go performSort(v.f, v.s, v.v, c)
 
-		val := <- c
+		val := <-c
 		results = append(results, val)
 		close(c)
 	}
@@ -150,12 +149,12 @@ func main() {
 		utils.PrintWarning("Warning: Verbose not in specified range. Defaulting to quiet mode.")
 		VERBOSE = false
 	}
-	
+
 	if *filename != "test.txt" && *inputsize != 0 {
 		utils.HandleError(errors.New("cannot use the -input and -count flags together"))
 	} else if *filename == "test.txt" && *inputsize == 0 {
 		utils.PrintWarning("Warning: Using default test file: test.txt")
-		runWithFile(*filename)	
+		runWithFile(*filename)
 	} else if *inputsize == 0 {
 		utils.PrintInfo("Running with input file: " + *filename)
 		runWithFile(*filename)
@@ -169,7 +168,7 @@ func main() {
 		s := fmt.Sprintf("Running with input size: %d", *inputsize)
 		utils.PrintInfo(s)
 		runWithCount(*inputsize)
-	}	
+	}
 }
 
 func createSorter(vals []string, includeBadSorts bool) []Sorter {

@@ -23,11 +23,11 @@ func HeapSort(a []int64) []int64 {
 }
 
 func parent(i int) int {
-	return int(math.Floor( float64(i-1) / 2 ))
+	return int(math.Floor(float64(i-1) / 2))
 }
 
 func child(i int) int {
-	return 2*i+1
+	return 2*i + 1
 }
 
 // enforces heap property
@@ -52,7 +52,7 @@ func siftDown(a []int64, s, e int) {
 			idx = child
 		}
 
-		if child + 1 <= e && a[idx] < a[child+1] {
+		if child+1 <= e && a[idx] < a[child+1] {
 			idx = child + 1
 		}
 

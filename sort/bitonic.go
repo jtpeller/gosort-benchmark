@@ -12,7 +12,7 @@ import "math"
 func Bitonic(a []int64) []int64 {
 	// enforce that the input size is a power of 2
 	l := len(a)
-	if (l & (l-1) != 0) {	// len not a power of 2
+	if l&(l-1) != 0 { // len not a power of 2
 		// pad a with zeros until next power of 2
 		a = make([]int64, int(math.Pow(2, math.Ceil(math.Log2(float64(l))))))
 	}
