@@ -11,7 +11,6 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	sortpkg "gosort/sort"
 	utils "gosort/utils"
 	"os"
 	"sort"
@@ -20,6 +19,8 @@ import (
 	"sync"
 	"text/tabwriter"
 	"time"
+
+	sortpkg "github.com/jtpeller/gosort"
 )
 
 type Sorter struct {
