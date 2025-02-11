@@ -17,19 +17,6 @@ const (
 	Reset  = "\u001b[0m"
 )
 
-type Interface interface {
-	Len() int
-	Less(i, j int) bool
-	Swap(i, j int)
-}
-
-// primarily for debugging
-func CheckError(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
-
 // for pretty printing for the user
 func HandleError(e error) {
 	if e != nil {
@@ -57,38 +44,6 @@ func IsSorted(a []int64) bool {
 	return true
 }
 
-func Min(nums ...int64) int64 {
-	min := nums[0]
-	for _, v := range nums {
-		if min > v {
-			min = v
-		}
-	}
-	return min
-}
-
-func Max(nums ...int64) int64 {
-	max := nums[0]
-	for _, v := range nums {
-		if max < v {
-			max = v
-		}
-	}
-	return max
-}
-
-func MaxIdx(nums ...int64) (int, int64) {
-	idx := 0
-	max := nums[0]
-	for i, v := range nums {
-		if max < v {
-			max = v
-			idx = i
-		}
-	}
-	return idx, max
-}
-
 func PrintDebug(msg ...string) {
 	fmt.Println(Blue, msg, Reset)
 }
@@ -103,8 +58,4 @@ func PrintWarning(msg ...string) {
 
 func PrintError(msg ...string) {
 	fmt.Println(Red, msg, Reset)
-}
-
-func RemoveElement(a []int64, idx int) []int64 {
-	return append(a[:idx], a[idx+1:]...)
 }

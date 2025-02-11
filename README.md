@@ -1,14 +1,17 @@
-# gosort
+# gosort-benchmark
+
+[![Go Report Card](https://goreportcard.com/badge/github.com/jtpeller/gosort-benchmark)](https://goreportcard.com/report/github.com/jtpeller/gosort-benchmark)
+[![Release](https://img.shields.io/github/release/jtpeller/gosort-benchmark.svg?style=flat-square)](https://github.com/jtpeller/gosort-benchmark/releases)
+![GitHub License](https://img.shields.io/github/license/jtpeller/gosort-benchmark)
 
 ## Overview
 
-This repo contains various sorting algorithms written in go.
+This repo benchmarks my gosort package.
 
-Running `main.go` will compare the execution times for each of the different sorting algorithms in the `sort` folder, instead of outputting the sorted values.
+Running `main.go` will compare the execution times for each of the different sorting algorithms my gosort repo.
 I implemented multithreading to improve the overall runtime, instead of running each sort sequentially.
 
-To compile into a binary, use the following while in the directory with `main.go`:
-`go build`
+To compile into a binary, use the following while in the directory with `main.go`: `go build`
 
 ## Modes
 
@@ -82,28 +85,6 @@ Verbose can be added to other modes (i.e., count + verbose mode).
 
 ## Contents
 
-- sort -- folder containing the implementation for the sort in the filename
-  - `bitonic.go`
-  - `bogo.go`
-  - `bubble.go`
-  - `bucket.go`
-  - `cocktail.go`
-  - `comb.go`
-  - `counting.go`
-  - `cycle.go`
-  - `gnome.go`
-  - `heapsort.go`
-  - `insertion.go`
-  - `merge.go`
-  - `oddeven.go`
-  - `pancake.go`
-  - `pigeonhole.go`
-  - `quicksort.go`
-  - `radix.go`
-  - `selection.go`
-  - `shell.go`
-  - `stooge.go`
-  - `tim.go`
 - utils
   - `utils.go` -- general utils and other useful things
 - `go.mod` -- Go module file
